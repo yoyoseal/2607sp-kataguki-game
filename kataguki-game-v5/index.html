@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>型抜き／糖片雕刻</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <section id="menuScreen" class="screen active">
+      <h1>型抜き／糖片雕刻</h1>
+      <p class="hint">選擇難度後開始挑戰</p>
+      <div class="level-grid">
+        <button class="level-btn" data-level="easy">簡單</button>
+        <button class="level-btn" data-level="hard">困難</button>
+        <button class="level-btn trial" data-level="god">神之試煉</button>
+      </div>
+      <p class="small-note">按住滑鼠／手指，沿著糖片輪廓雕刻。碰到黑色判定區或中途放手即失敗。</p>
+    </section>
+
+    <section id="playScreen" class="screen">
+      <div class="topbar">
+        <button id="backBtn" class="mini-btn">返回</button>
+        <div id="levelName" class="level-name">簡單</div>
+        <div id="timer" class="timer">00.00</div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="500" height="300" aria-label="糖片雕刻遊戲區"></canvas>
+      </div>
+
+      <div class="play-footer">
+        <button id="startBtn" class="primary-btn">開始雕刻</button>
+        <p id="statusText" class="status-text">點擊開始後，從紅色起點出發，抵達藍色終點。</p>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="result-card">
+        <img id="resultImage" class="result-image" src="" alt="結果圖片" />
+        <h2 id="resultTitle">挑戰結果</h2>
+        <p id="resultText" class="result-text"></p>
+        <button id="returnMenuBtn" class="primary-btn">返回選擇關卡</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
