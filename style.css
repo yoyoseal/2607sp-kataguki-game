@@ -39,6 +39,12 @@ body {
   display: block;
 }
 
+#menuScreen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 h1 {
   margin: 44px 0 30px;
   text-align: center;
@@ -52,6 +58,7 @@ h1 {
   margin: 0 auto;
   display: grid;
   gap: 10px;
+  justify-content: center;
 }
 
 .level-row {
