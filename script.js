@@ -26,7 +26,6 @@
   const levelName = $("levelName");
   const timer = $("timer");
   const statusText = $("statusText");
-  const startBtn = $("startBtn");
   const backBtn = $("backBtn");
   const returnMenuBtn = $("returnMenuBtn");
   const resultImage = $("resultImage");
@@ -74,8 +73,6 @@
     resetGameState();
     levelName.textContent = currentLevel.name;
     timer.textContent = "00.00";
-    startBtn.disabled = true;
-    startBtn.textContent = "載入中";
     setStatus("糖片準備中……");
     showScreen(playScreen);
 
@@ -92,13 +89,12 @@
 
       drawCandy();
       isReady = true;
-      startBtn.disabled = false;
-      startBtn.textContent = "開始雕刻";
-      setStatus("只能紅點出發，藍點為終點。");
+		isArmed = true;
+
+		setStatus("按住紅點開始雕刻，持續拖曳線條至藍點位置");
     } catch (error) {
       drawText("圖片載入失敗，請確認 images 資料夾與檔名。", 14);
       setStatus(error.message);
-      startBtn.textContent = "無法開始";
     }
   }
 
@@ -126,18 +122,7 @@
     ctx.fillText(text, canvas.width / 2, canvas.height / 2);
   }
 
-  function armGame() {
-    if (!isReady) return;
-    drawCandy();
-    isArmed = true;
-    isDrawing = false;
-    isPointerDown = false;
-    lastPoint = null;
-    stopTimer();
-    timer.textContent = "00.00";
-    startBtn.textContent = "重新開始";
-    setStatus("已準備。請在圖上的白色安全區域按住，開始雕刻。");
-  }
+
 
   function startTimer() {
     stopTimer();
@@ -196,7 +181,6 @@
     if (event.cancelable) event.preventDefault();
     if (isDrawing) return;
     if (!isArmed) {
-      if (isReady) setStatus("請先點擊「開始雕刻」。");
       return;
     }
 
@@ -214,7 +198,7 @@
     lastPoint = point;
     startTimer();
     drawPoint(point);
-    setStatus("雕刻中。只能沿著安全區前進，藍點為終點。");
+    setStatus("雕刻中...");
   }
 
   function moveStroke(event) {
@@ -227,7 +211,7 @@
     for (const p of points) {
       const zone = classify(p);
       if (zone === "fail") {
-        endGame(false, "糖片裂開了。碰到了失敗區域。");
+        endGame(false, "糖片裂開了！");
         return;
       }
       if (zone === "end") {
@@ -289,7 +273,6 @@
     isArmed = false;
     isDrawing = false;
     isPointerDown = false;
-    startBtn.textContent = "開始雕刻";
 
     if (success && currentLevel) {
       saveBestTime(currentLevel.key, Number(finalTime));
@@ -304,7 +287,6 @@
 
   function returnToMenu() {
     resetGameState();
-    startBtn.textContent = "開始雕刻";
     showScreen(menuScreen);
   }
 
@@ -343,12 +325,10 @@
     button.addEventListener("click", () => loadLevel(button.dataset.level));
   });
 
-  startBtn.addEventListener("click", armGame);
+
   backBtn.addEventListener("click", returnToMenu);
   returnMenuBtn.addEventListener("click", returnToMenu);
 
-  // 三套事件都支援：Pointer / Mouse / Touch。
-  // 主要移動與放開綁在 document，避免 Wix iframe 或瀏覽器拖曳時離開 canvas 就斷線。
   updateBestTimeDisplay();
 
   canvas.addEventListener("pointerdown", startStroke, { passive: false });
